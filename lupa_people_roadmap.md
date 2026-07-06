@@ -1,6 +1,6 @@
 # Lupa People — Build Roadmap v2
 
-A phased roadmap for **Lupa People**, an internal people-operations tool covering **Org Chart**, **PTO**, and **Performance Reviews** for Lupa (≤50 people, contractors-treated-as-employees, across LatAm + a US-based CEO).
+A phased roadmap for **Lupa People**, an internal people-operations tool covering **Org Chart**, **PTO**, **Performance Reviews**, and **Onboarding / Level Up** for Lupa (≤50 people, contractors-treated-as-employees, across LatAm + a US-based CEO).
 
 Designed to be **designed in Pencil and built in Lovable + Supabase**, one slice at a time, in the order **Org Chart → PTO → Reviews**. Intended to be executed in a single build week.
 
@@ -12,11 +12,12 @@ Designed to be **designed in Pencil and built in Lovable + Supabase**, one slice
 
 v2 integrates the decision round on §0:
 
-1. **Cycle scoring is a configurable weighted blend.** Each side is a simple average (no per-dimension weights). Overall defaults to **60% Lupa Way / 40% role KPIs**, and **admins set the split in the UI when creating a cycle.**
+1. **Cycle scoring is a configurable weighted blend.** Each side is a simple average (no per-dimension weights). Overall defaults to **60% Company Culture / 40% Per role**, and **admins set the split in the UI when creating a cycle.**
 2. **Half-Friday is a per-person, approval-gated entitlement** — not a blanket company day. Admins open a half-Friday window for a month; each person *requests* theirs and a manager approves it (to protect client coverage). Still non-deducting.
-3. **Assessment frameworks are structured and versioned.** The Lupa Way framework gains Sections → Competencies (with definition, observable behaviors, outcomes/impact). Edits create a **new version** that applies to **future reviews only**; past reviews stay frozen on the version they were built with. The same versioning applies to role-KPI frameworks.
+3. **Assessment frameworks are structured and versioned.** The Company Culture framework gains Sections → Competencies (with definition, observable behaviors, outcomes/impact). Edits create a **new version** that applies to **future reviews only**; past reviews stay frozen on the version they were built with. The same versioning applies to Per Role frameworks.
 4. **AI tier recommendation added.** After a cycle is scored, an AI suggestion (Keep in tier / Promote / etc., with rationale) is generated via the Anthropic API. Advisory only; comp stays walled off.
 5. **Light mode**, matching brand guidelines (resolves the v1 dark/light palette conflict).
+6. **Onboarding & Level Up added (Phase 5).** A reusable lesson library (video / presentation / text / quiz), day- or week-paced courses assembled from lessons, post-publish enrollment (with optional auto-enroll of new hires), and a learner "Level Up" space. Frameworks renamed for clarity: **Lupa Way → Company Culture**, **role KPIs → Per Role**.
 
 ---
 
@@ -36,12 +37,12 @@ This tool is the **system of record for the employee roster.** No payroll/HRIS i
 
 The decisions that shape the schema, now settled. Tagged with their D-labels for traceability.
 
-- **D1 — Cycle scoring.** Each axis is a **simple average** of its 0–3 scores (no per-dimension weights). **Overall = a weighted blend of the two axes, default 60% Lupa Way / 40% role KPIs, admin-configurable per cycle at creation.** The employee's **self-score is shown side-by-side** with the manager score (gap view) and is **not blended** into the official number. Admins can reopen and adjust.
+- **D1 — Cycle scoring.** Each axis is a **simple average** of its 0–3 scores (no per-dimension weights). **Overall = a weighted blend of the two axes, default 60% Company Culture / 40% Per role, admin-configurable per cycle at creation.** The employee's **self-score is shown side-by-side** with the manager score (gap view) and is **not blended** into the official number. Admins can reopen and adjust.
 - **D2 — Managers don't re-fill at cycle time.** A cycle **assembles the coachings the manager already wrote** in the window as the manager's contribution. The admin's bulk action adds the self-assessment (and the upward review, if launched).
 - **D3 — PIP is lightweight.** A commitment marked **"not accomplished"** auto-creates a **flagged, trackable PIP record** (not a multi-step workflow).
 - **D4 — Half-Friday is a non-deducting, approval-gated request.** Admins open a half-Friday window per month; each person **requests** their half-Friday and a manager **approves** it (coverage protection). Does **not** deduct PTO balance.
 - **D5 — "Manager" is derived.** Base role is **Employee** or **Admin**. A person is a **Manager** by having ≥1 solid-line direct report. Manager powers apply to **solid-line direct reports only.** **Dotted-line = org-chart visibility only** (no approval/review power). A person can be Admin **and** Manager.
-- **D6 — Frameworks are admin-built and versioned.** Admins build the Lupa Way framework in-app (Sections → Competencies, each with definition, observable behaviors, outcomes/impact). Edits create a **new version**; **only future reviews** use it, past reviews stay frozen. Same model for role-KPI frameworks.
+- **D6 — Frameworks are admin-built and versioned.** Admins build the Company Culture framework in-app (Sections → Competencies, each with definition, observable behaviors, outcomes/impact). Edits create a **new version**; **only future reviews** use it, past reviews stay frozen. Same model for Per Role frameworks.
 
 **Other locked defaults:**
 
@@ -50,7 +51,7 @@ The decisions that shape the schema, now settled. Tagged with their D-labels for
 - **UTO** never touches a balance — approved, logged, calendared only.
 - **No self-approval.** A request from a manager-who-is-also-admin routes to a different admin.
 - **Required roster fields** (admin-set): full name, work email, function, job title, tier, solid-line manager (nullable only for the CEO/root), base role, status, start date. **Optional, employee-editable**: photo, full address, date of birth, emergency contact, "How to work with me."
-- **KPI frameworks are per job title, not per tier.** Tier is a label on the person; it doesn't fork the KPI set.
+- **Per Role frameworks are per job title, not per tier.** Tier is a label on the person; it doesn't fork the role framework.
 - **Overlap warning spans the whole company** but visually distinguishes "your team" from everyone else.
 
 ---
@@ -65,7 +66,7 @@ The decisions that shape the schema, now settled. Tagged with their D-labels for
 
 **Sensitive-by-default visibility.** Reviews and PTO are personal. Default deny. Employee sees only their own; manager sees their **solid-line direct line only** (never skip-level, never sideways); admin sees all. Enforced in Supabase **Row-Level Security**, not just the UI — the UI is not a security boundary.
 
-**Frameworks are versioned; reviews freeze their version.** The Lupa Way framework and each role-KPI framework are versioned. When a coaching, self-assessment, or cycle is created, it **captures the framework version in effect at that moment.** Later edits create a new version and never mutate past reviews. (This is the prior project's "frozen artifact" idea, right-sized: a review you signed off on last quarter must still read the way it did then.)
+**Frameworks are versioned; reviews freeze their version.** The Company Culture framework and each Per Role framework are versioned. When a coaching, self-assessment, or cycle is created, it **captures the framework version in effect at that moment.** Later edits create a new version and never mutate past reviews. (This is the prior project's "frozen artifact" idea, right-sized: a review you signed off on last quarter must still read the way it did then.)
 
 **Config over code.** Functions, job titles, tiers, and both framework types are **data in tables**, editable in-app — never hardcoded.
 
@@ -83,7 +84,7 @@ The decisions that shape the schema, now settled. Tagged with their D-labels for
 
 ## 2. Technology stack
 
-**Design:** Pencil (`.pen`), one canvas, one vertical lane per slice (Org → PTO → Reviews → Dashboards), left-to-right = ship order. *(Lightweight convention from the prior project; no separate canvas-reorganization spec unless the canvas grows large.)*
+**Design:** Pencil (`.pen`), one canvas, one vertical lane per slice (Org → PTO → Reviews → Dashboards → Level Up), left-to-right = ship order. *(Lightweight convention from the prior project; no separate canvas-reorganization spec unless the canvas grows large.)*
 
 **Build:** Lovable (React + Tailwind + shadcn/ui).
 
@@ -126,15 +127,23 @@ Full field lists land in each phase. This is the shape.
 - `pto_accrual_log` — person_id, period, amount, source (`monthly`|`admin_adjustment`), note.
 
 **Reviews (Phase 3)**
-- *Lupa Way framework (versioned):* `lupa_framework_versions` (id, version_no, status, published_at, published_by) → `lupa_sections` (id, version_id, name, order) → `lupa_competencies` (id, section_id, name, definition, observable_behaviors, outcomes_impact, order; scored 0–3).
-- *Role-KPI frameworks (per job title, versioned):* `kpi_framework_versions` (id, job_title_id, version_no, status, authored_by) → `kpis` (id, version_id, name, kind `qualitative`|`quantitative`, definition, target_or_descriptor, order; scored 0–3).
-- `review_cycles` — id, name, window_start, window_end, lupa_weight (default 0.60), kpi_weight (default 0.40), status (`draft`|`open`|`closed`), launched_by.
-- `coachings` (check-ins) — id, employee_id, manager_id, lupa_version_id, kpi_version_id, created_at, status (`draft`|`released`). `coaching_scores` — coaching_id, dimension_ref, score (0–3), note. `commitments` — id, coaching_id, text, result (`pending`|`accomplished`|`keep_monitoring`|`not_accomplished`), carried_into_coaching_id.
-- `self_assessments` — id, employee_id, cycle_id (nullable for ad-hoc), lupa_version_id, kpi_version_id, status (`assigned`|`submitted`), submitted_at. `self_assessment_scores` — dimension/score/note.
+- *Company Culture framework (versioned):* `culture_framework_versions` (id, version_no, status, published_at, published_by) → `culture_sections` (id, version_id, name, order) → `culture_competencies` (id, section_id, name, definition, observable_behaviors, outcomes_impact, order; scored 0–3).
+- *Per Role frameworks (per job title, versioned):* `role_framework_versions` (id, job_title_id, version_no, status, authored_by) → `role_sections` (id, version_id, name, order) → `role_competencies` (id, section_id, name, definition, observable_behaviors, outcomes_impact, order; scored 0–3).
+- `review_cycles` — id, name, window_start, window_end, culture_weight (default 0.60), role_weight (default 0.40), status (`draft`|`open`|`closed`), launched_by.
+- `coachings` (check-ins) — id, employee_id, manager_id, culture_version_id, role_version_id, created_at, status (`draft`|`released`). `coaching_scores` — coaching_id, dimension_ref, score (0–3), note. `commitments` — id, coaching_id, text, result (`pending`|`accomplished`|`keep_monitoring`|`not_accomplished`), carried_into_coaching_id.
+- `self_assessments` — id, employee_id, cycle_id (nullable for ad-hoc), culture_version_id, role_version_id, status (`assigned`|`submitted`), submitted_at. `self_assessment_scores` — dimension/score/note.
 - `upward_reviews` — id, manager_id (subject), cycle_id, **anonymous**, submitted_at. `upward_review_scores` — dimension/score/note.
-- `review_scores` (cycle output) — id, cycle_id, employee_id, lupa_avg, kpi_avg, lupa_weight, kpi_weight, overall (computed), self_lupa_avg, self_kpi_avg. `review_score_dimensions` — per-dimension manager_score + self_score breakdown.
+- `review_scores` (cycle output) — id, cycle_id, employee_id, culture_avg, role_avg, culture_weight, role_weight, overall (computed), self_culture_avg, self_role_avg. `review_score_dimensions` — per-dimension manager_score + self_score breakdown.
 - `tier_recommendations` — id, cycle_id, employee_id, current_tier_id, suggested_action (`keep`|`promote`|`develop`|…), rationale, model, generated_at, reviewed_by, decision (nullable).
 - `pips` — id, employee_id, manager_id, source_commitment_id, description, status (`open`|`in_progress`|`closed`), notes, created_at.
+
+**Onboarding & Level Up (Phase 5)**
+- `lessons` — id, title, type (`video`|`presentation`|`text`|`quiz`), description, url (video/presentation embed), body (rich text; text lessons), est_minutes, cover_url, status (`draft`|`published`), created_by.
+- `quiz_questions` — id, lesson_id, prompt, kind (`single`|`multi`|`open_written`|`open_video`), options jsonb (with correct flags for select kinds), model_answer (open kinds; AI grades against it), order. *(A quiz lesson may also carry a pass_mark.)*
+- `courses` — id, title, description, cover_url, cadence (`day`|`week`), visibility, auto_enroll (bool), status (`draft`|`published`), created_by.
+- `course_lessons` — id, course_id, lesson_id, period_no (which day/week), order. *(Count of distinct period_no = plan length.)*
+- `enrollments` — id, course_id, person_id, source (`manual`|`auto`), enrolled_at, due_at (computed = enrolled_at + plan length), status (`in_progress`|`completed`), completed_at.
+- `lesson_progress` — id, enrollment_id, lesson_id, status (`not_started`|`in_progress`|`completed`), completed_at, quiz_score (nullable).
 
 ---
 
@@ -204,30 +213,30 @@ Each phase is a demoable unit. Within a phase: data model → workflows → perm
 
 ### Phase 3 — Performance Reviews *(Slice 3 — the deep one)*
 
-**Goal:** Every employee is measured on **two axes — the Lupa Way framework and their role's KPIs** — through ongoing manager coachings plus admin-triggered self and upward assessments, rolled up into per-employee scores on demand, with an AI tier suggestion.
+**Goal:** Every employee is measured on **two axes — the Company Culture framework and their Per Role framework** — through ongoing manager coachings plus admin-triggered self and upward assessments, rolled up into per-employee scores on demand, with an AI tier suggestion.
 
 **Data model:** the framework, coaching, assessment, cycle, scoring, tier-recommendation, and PIP entities in §3.
 
 **Framework builders (admin/manager, versioned):**
-- **Lupa Way builder** (admin) — create **Sections** that group **Competencies**; each competency has a **name, definition, observable behaviors** (surfaced as a **tooltip** on the scorecard), and **outcomes/impact**; scored **0–3**. Editing **publishes a new version**; future reviews use it, past reviews stay frozen.
-- **Role-KPI builder** (manager) — per job title, a set of **KPIs** (qualitative or quantitative), each with a definition/target; scored **0–3**; versioned the same way.
-- Every assessment form = **shared Lupa Way block + the person's role-KPI block.**
+- **Company Culture builder** (admin) — create **Sections** that group **Competencies**; each competency has a **name, definition, observable behaviors** (surfaced as a **tooltip** on the scorecard), and **outcomes/impact**; scored **0–3**. Editing **publishes a new version**; future reviews use it, past reviews stay frozen.
+- **Per Role builder** (manager) — per job title, **Sections** grouping **Competencies** (name, definition, observable behaviors, outcomes/impact); scored **0–3**; same builder and versioning as Company Culture.
+- Every assessment form = **shared Company Culture block + the person's Per Role block.**
 
 **Workflows:**
 - **Manager coachings (check-ins)** — a manager creates a coaching for a direct report **anytime**: score each dimension 0–3, write a **note per dimension**, set **commitments**. **Draft → released**; once released the employee sees it and **tracks commitments.**
 - **Commitment lifecycle** — a commitment carries into the **next** coaching with a result: **accomplished / keep monitoring / not accomplished.** **"Not accomplished" auto-creates a PIP** (lightweight).
 - **Self-assessments** — employees fill when assigned. **Admin triggers a company-wide self-assessment campaign** on demand. A self-assessment is **hidden from the manager until the manager's side is finalized.**
 - **Upward reviews** — **admin triggers a company-wide upward campaign** on demand; each employee reviews their solid-line manager; **anonymous** to the manager; aggregated identity-free.
-- **Review cycle** — admin **launches manually** with a window **and sets the Lupa-Way/KPI weight split** (default 60/40). On close, the cycle **assembles all in-window coachings** (manager signal) **+ the self-assessment campaign** (+ upward if launched) and **computes per-employee scores**: each axis averaged, overall = the weighted blend; self shown side-by-side (not blended).
+- **Review cycle** — admin **launches manually** with a window **and sets the Company-Culture / Per-role weight split** (default 60/40). On close, the cycle **assembles all in-window coachings** (manager signal) **+ the self-assessment campaign** (+ upward if launched) and **computes per-employee scores**: each axis averaged, overall = the weighted blend; self shown side-by-side (not blended).
 - **AI tier recommendation** — after scoring, an Edge Function calls the **Anthropic API** with the employee's cycle scores (both axes), current tier, and trend, returning a **suggested action (Keep in tier / Promote / Develop / …) with a short rationale.** Stored on `tier_recommendations`; **advisory only** — a human reviews; never auto-applied; comp untouched.
 - **Release to employee** — explicit step; before it, cycle scores and the recommendation are not visible to the employee. After it, the **employee can browse all previously released assessments/scores.**
 - **Admin cycle ops** — launch, **track completion %**, send **in-app nudges**, **reopen** a review, view **score history/trend per person.**
 
-**Permissions:** employee sees own released coachings/self-assessments/cycle scores + submits assigned self/upward; manager authors + sees their direct reports' coachings, owns the role-KPI frameworks, sees own anonymous upward feedback; admin sees and does all. Self-before-manager sequencing and the release gate are enforced in RLS.
+**Permissions:** employee sees own released coachings/self-assessments/cycle scores + submits assigned self/upward; manager authors + sees their direct reports' coachings, owns the Per Role frameworks, sees own anonymous upward feedback; admin sees and does all. Self-before-manager sequencing and the release gate are enforced in RLS.
 
 **Out of scope (v1):** peer reviews (v2), comp linkage (walled off), exportable review PDFs.
 
-**Definition of done:** an admin builds a versioned Lupa Way framework; a manager builds a role-KPI framework and runs two coachings with a carried commitment that fails and spawns a PIP; an admin launches self + upward campaigns and a cycle with a custom weight split; the cycle produces per-employee scores with a self/manager gap and an AI tier suggestion; release makes scores visible to the employee; editing a framework afterward does not change the closed cycle; completion % and nudges work.
+**Definition of done:** an admin builds a versioned Company Culture framework; a manager builds a Per Role framework and runs two coachings with a carried commitment that fails and spawns a PIP; an admin launches self + upward campaigns and a cycle with a custom weight split; the cycle produces per-employee scores with a self/manager gap and an AI tier suggestion; release makes scores visible to the employee; editing a framework afterward does not change the closed cycle; completion % and nudges work.
 
 ---
 
@@ -239,7 +248,7 @@ Each phase is a demoable unit. Within a phase: data model → workflows → perm
 - **Headcount & org shape** (by function, tier, status).
 - **PTO** — who's out this week, balances, simple liability view.
 - **Review-cycle completion** — % filled, by team.
-- **Score distribution** — across the Lupa Way + KPI axes, by team/function.
+- **Score distribution** — across the Company Culture + Per role axes, by team/function.
 
 **Out of scope (v1):** attrition analytics, exportable reports.
 
@@ -247,9 +256,35 @@ Each phase is a demoable unit. Within a phase: data model → workflows → perm
 
 ---
 
+### Phase 5 — Onboarding & Level Up *(Slice 5 — ships last)*
+
+**Goal:** Admins build a library of lessons, assemble them into day- or week-paced courses, and enroll people; each employee gets a **Level Up** space that walks them through their schedule and flags whether they're on pace.
+
+**Data model:** `lessons`, `quiz_questions`, `courses`, `course_lessons`, `enrollments`, `lesson_progress` (see §3).
+
+**Builders (admin):**
+- **Lesson editor** — a lesson is one of four types: **video** (embed a Loom / Jam / YouTube / Vimeo URL), **presentation** (embed a Google Slides / Pitch / Canva / PDF URL), **text** (formatted rich text to read), or **quiz**. Each has a title, optional description, estimated time, cover image, and draft/published status; lessons live in a **reusable library** and can be added to any course.
+- **Quiz builder** — questions are **single-select, multi-select, open (written), or open (video)**. Select questions mark the correct option(s); open questions store a **model answer** the AI grades responses against. A quiz sets a pass mark and allows attempts.
+
+**Workflows:**
+- **Assemble a course** — bundle library lessons into a course (title, description, cover, visibility). Choose to divide the course by **day or week** and place each lesson on a day/week; the **number of days/weeks is derived** from the plan, which defines the pace.
+- **Enrollment (after publishing)** — enroll by individual, function/team, or everyone; an optional per-course toggle **auto-enrolls new hires** as they join the roster. Each person's **due date is computed** from their enrollment date + plan length (not set on the course). Manual enrollment implies the course is required for those enrolled.
+- **Learner flow (Level Up)** — the employee sees assigned courses grouped in-progress / not-started / completed with progress, pace, and due date; opens a course as a **day-by-day (or week-by-week) plan** (completed / current / locked); takes each lesson in place — play the video/slides, read the text, or answer a quiz (select, write, or record a video) — and marks it complete, which advances their progress and pace.
+- **AI grading** — written answers and video-response transcripts are compared by an Edge Function (Anthropic API) to the question's **model answer**; uncertain results are flagged for a person. Advisory.
+- **Accountability** — a course-manage view lists enrolled people with lesson progress and a **pace flag (on-track / behind by N days** against their schedule), plus a completed list with each person's **finish date** (and quiz score where relevant).
+- **Notifications** — "course assigned" pings the learner; "course completed" pings admins (in-app).
+
+**Permissions:** admins build lessons/courses and manage enrollment and progress for everyone; employees see and take **their own** assigned courses only. Lesson/course content is company-wide — not sensitive-by-default like reviews and PTO.
+
+**Out of scope (v1):** certificates/badges, external/LMS (SCORM) import, question banks/randomization beyond a single quiz, learner discussion, per-lesson deadlines separate from the day/week plan.
+
+**Definition of done:** an admin creates one lesson of each type (including a quiz with a model-answer open question), assembles them into a 3-day course, publishes it and enables auto-enroll; a new hire is auto-enrolled with a computed due date; the learner works through the daily plan and completes the quiz; the manage view shows an in-progress person flagged behind schedule and completed people with finish dates.
+
+---
+
 ## 5. The MVP cut, stated honestly
 
-**In v1:** roster as system of record; Google SSO; profiles + "My Profile" home; org chart (solid + dotted, search, admin-edit); PTO/UTO/half-Friday with auto-accrual, half-days, overlap warnings, cancel/modify, half-Friday windows + requests, shared-calendar write; full reviews (two versioned-framework axes, framework builders, coachings, commitments→PIP, self + upward campaigns, manual cycles with configurable weights, scoring, AI tier suggestion, release, history); manager/admin dashboards; in-app notifications; light activity log; light-mode responsive web.
+**In v1:** roster as system of record; Google SSO; profiles + "My Profile" home; org chart (solid + dotted, search, admin-edit); PTO/UTO/half-Friday with auto-accrual, half-days, overlap warnings, cancel/modify, half-Friday windows + requests, shared-calendar write; full reviews (two versioned-framework axes, framework builders, coachings, commitments→PIP, self + upward campaigns, manual cycles with configurable weights, scoring, AI tier suggestion, release, history); manager/admin dashboards; onboarding & Level Up (lesson library across four types, day/week-paced courses, post-publish + auto enrollment, learner flow with AI-graded open answers); in-app notifications; light activity log; light-mode responsive web.
 
 **Explicitly deferred to v2+:** maternity/paternity & medical leave; peer reviews; comp linkage; Slack & email notifications; native mobile; exportable reports; org-chart history, open roles, department/my-team views & filters; per-country holiday calendars; payroll export; accrual caps/expiry.
 
@@ -257,7 +292,7 @@ Each phase is a demoable unit. Within a phase: data model → workflows → perm
 
 ## 6. Recommended Lovable working pattern
 
-For each slice (Org → PTO → Reviews → Dashboards):
+For each slice (Org → PTO → Reviews → Dashboards → Level Up):
 
 1. **Design the slice in Pencil first** against this roadmap and the (forthcoming) User Stories.
 2. **Schema first in Supabase**, then **test RLS per table** — sensitive-by-default means a missing policy leaks reviews or PTO. Verify each role's read/write before touching UI.
@@ -270,9 +305,9 @@ For each slice (Org → PTO → Reviews → Dashboards):
 
 ## 7. Open questions to resolve before/while building
 
-1. **Seed the Lupa Way framework.** Not blocking (admins build it in-app), but a real first version — Sections + Competencies with definitions/observable-behaviors/outcomes — would let the design show true content instead of lorem. Send it when convenient.
+1. **Seed the Company Culture framework.** Not blocking (admins build it in-app), but a real first version — Sections + Competencies with definitions/observable-behaviors/outcomes — would let the design show true content instead of lorem. Send it when convenient.
 2. **Product name** — "Lupa People" is a placeholder.
-3. **Role-KPI framework authorship** when a job title spans more than one manager. Default: any manager can edit it; recommended: the function head owns it. Confirm.
+3. **Per Role framework authorship** when a job title spans more than one manager. Default: any manager can edit it; recommended: the function head owns it. Confirm.
 4. **Half-day mechanics** — a half-day is 0.5 of a day for balance; do you need an AM/PM designation, or just "half"? Assumed 0.5 with an optional AM/PM tag.
 5. **CEO / root** — confirm the CEO is the single tree root (`manager_id = null`) and that their own (rare) PTO routes to an admin approver.
 6. **AI tier actions** — confirm the suggestion set. Default: **Keep in tier / Promote / Develop further / Flag for PIP review.** Add/remove as you like.

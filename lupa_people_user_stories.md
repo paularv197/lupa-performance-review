@@ -1,6 +1,6 @@
 # Lupa People — User Stories
 
-A reference set of user stories describing the full flow of Lupa People, from roster setup through review cycles. Read sequentially the first time (it builds the picture slice by slice), then use as reference. Companion to `lupa_people_roadmap_v2.md`; phase numbers and IDs match it.
+A reference set of user stories describing the full flow of Lupa People, from roster setup through review cycles. Read sequentially the first time (it builds the picture slice by slice), then use as reference. Companion to `lupa_people_roadmap.md`; phase numbers and IDs match it.
 
 ---
 
@@ -13,7 +13,7 @@ Each story uses the standard format:
 >
 > Acceptance criteria follow.
 
-Cross-references like `→ Phase 2` point to the roadmap. This document is intentionally **not exhaustive** — it covers the stories that drive design and architecture, not every CRUD field. Stories are grouped by slice in ship order: Foundations → Org Chart → PTO → Reviews → Dashboards.
+Cross-references like `→ Phase 2` point to the roadmap. This document is intentionally **not exhaustive** — it covers the stories that drive design and architecture, not every CRUD field. Stories are grouped by slice in ship order: Foundations → Org Chart → PTO → Reviews → Dashboards → Onboarding & Level Up.
 
 ---
 
@@ -21,7 +21,7 @@ Cross-references like `→ Phase 2` point to the roadmap. This document is inten
 
 **Employee.** Anyone on the roster. At Lupa everyone is a contractor treated as a regular employee — **no differentiation.** Sees their own data, the org chart, and their own reviews/PTO. Submits requests and assessments when assigned.
 
-**Manager.** Not a separate role — a person becomes a Manager by having **at least one solid-line direct report.** Powers (approve PTO, run coachings, author role-KPI frameworks, see direct reports' reviews) apply to their **solid-line direct line only** — never skip-level, never sideways. Dotted-line relationships carry no authority.
+**Manager.** Not a separate role — a person becomes a Manager by having **at least one solid-line direct report.** Powers (approve PTO, run coachings, author Per Role frameworks, see direct reports' reviews) apply to their **solid-line direct line only** — never skip-level, never sideways. Dotted-line relationships carry no authority.
 
 **Admin.** Elevated base role; **Leadership/Exec folds in here** (no separate persona). Sees and does everything: roster, config, reporting lines, all PTO, all reviews, cycle management, dashboards. An Admin can **also** be a Manager.
 
@@ -155,21 +155,21 @@ Acceptance: a requester can never be their own approver; manager-admins' request
 
 Scaling reviews with a system behind them. → Phase 3.
 
-**US-3.1 — Build the Lupa Way framework**
+**US-3.1 — Build the Company Culture framework**
 **As an** admin · **I want to** define Sections, Competencies, definitions, observable behaviors, and outcomes/impact · **So that** everyone is scored against the same clear bar.
-Acceptance: builder supports Sections grouping Competencies; each competency has a name, definition, observable behaviors, and outcomes/impact; scored 0–3. Mirrors the role-KPI builder in shape.
+Acceptance: builder supports Sections grouping Competencies; each competency has a name, definition, observable behaviors, and outcomes/impact; scored 0–3. Uses the same builder as the Per Role frameworks.
 
 **US-3.2 — Edit the framework without rewriting history**
 **As an** admin · **I want** my edits to apply only to future reviews · **So that** past reviews stay exactly as they were.
 Acceptance: publishing edits creates a new framework **version**; reviews stamp the version in effect at creation; closed reviews never change when the framework is edited.
 
-**US-3.3 — Build role KPIs**
-**As a** manager · **I want to** define the KPIs for a job title · **So that** people in that role are measured on the right outcomes.
-Acceptance: per job title (not per person, not per tier), a set of KPIs (qualitative or quantitative) each scored 0–3, versioned like the Lupa Way framework.
+**US-3.3 — Build Per Role frameworks**
+**As a** manager · **I want to** define the framework for a job title · **So that** people in that role are measured on what matters for their role.
+Acceptance: per job title (not per person, not per tier), a framework of sections and competencies each scored 0–3, using the same builder and versioning as the Company Culture framework.
 
 **US-3.4 — Run a coaching / check-in**
 **As a** manager · **I want to** score a direct report on each dimension, leave a note per dimension, and set commitments · **So that** I coach continuously, not just at cycle time.
-Acceptance: a coaching can be created anytime for a direct report; covers Lupa Way competencies + the person's role KPIs (0–3 each) with per-dimension notes; commitments can be added. Draft until released.
+Acceptance: a coaching can be created anytime for a direct report; covers the Company Culture competencies + the person's Per Role competencies (0–3 each) with per-dimension notes; commitments can be added. Draft until released.
 
 **US-3.5 — See what "good" looks like while scoring**
 **As a** manager · **I want** observable behaviors on a tooltip in the scorecard · **So that** I score consistently.
@@ -204,8 +204,8 @@ Acceptance: a manual campaign assigns each employee an upward review of their so
 Acceptance: upward responses are aggregated to the manager without identities; no view exposes who said what.
 
 **US-3.13 — Launch a cycle with a weight split**
-**As an** admin · **I want to** launch a review cycle over a window and set the Lupa-Way/KPI weighting · **So that** the score reflects what we care about this cycle.
-Acceptance: cycle has a window and a weight split (default 60% Lupa Way / 40% KPIs), editable at creation. Launching it can also fire the self/upward campaigns.
+**As an** admin · **I want to** launch a review cycle over a window and set the Company-Culture / Per-role weighting · **So that** the score reflects what we care about this cycle.
+Acceptance: cycle has a window and a weight split (default 60% Company Culture / 40% Per role), editable at creation. Launching it can also fire the self/upward campaigns.
 
 **US-3.14 — The cycle assembles the signal into scores**
 **As an** admin · **I want** the cycle to gather the manager's in-window coachings plus the self-assessment (and upward, if run) and produce per-employee scores · **So that** scoring doesn't require managers to re-fill anything.
@@ -250,8 +250,62 @@ Acceptance: scoped to the manager's team; admins see all.
 Acceptance: live % filled per team during an open cycle.
 
 **US-4.4 — Score distribution at a glance**
-**As an** admin · **I want** score distributions across the Lupa Way and KPI axes by team/function · **So that** I spot patterns.
+**As an** admin · **I want** score distributions across the Company Culture and Per role axes by team/function · **So that** I spot patterns.
 Acceptance: on-screen distribution; employees never see this surface.
+
+---
+
+## Phase 5 — Onboarding & Level Up
+
+Structured learning: build lessons, assemble them into scheduled courses, and hold people accountable to a pace. → Phase 5.
+
+**US-5.1 — Create a lesson**
+**As an** admin · **I want to** create a lesson of a given type — video, presentation, text, or quiz · **So that** I have reusable building blocks for courses.
+Acceptance: video and presentation lessons embed a URL (Loom / Jam / YouTube / Vimeo for video; Google Slides / Pitch / Canva / PDF for presentation); text lessons hold formatted rich text to read; quiz lessons hold one or more questions. Each lesson has a title, optional description, estimated time, cover image, and draft/published status. Lessons live in a shared library and can be reused across courses.
+
+**US-5.2 — Build a quiz**
+**As an** admin · **I want** quiz questions of several types · **So that** I can check understanding in different ways.
+Acceptance: a question is single-select, multi-select, open (written), or open (video). Select questions define options with the correct answer(s) marked; open questions store a model answer to grade against. A quiz can set a pass mark and allow repeat attempts.
+
+**US-5.3 — AI-check open answers**
+**As an** admin · **I want** written and video answers graded against the model answer · **So that** open questions scale without hand-marking every one.
+Acceptance: written responses and video-response transcripts are compared by AI to the question's model answer; uncertain results are flagged for a person to review. Advisory, never the only signal.
+
+**US-5.4 — Assemble a course**
+**As an** admin · **I want to** bundle lessons into a course · **So that** related learning ships together.
+Acceptance: a course has a title, description, cover image, visibility, and an ordered set of lessons drawn from the library; draft/published status. Lessons are added after search from the library and reordered freely.
+
+**US-5.5 — Pace a course by day or week**
+**As an** admin · **I want to** place each lesson on a specific day or week · **So that** learners follow an explicit schedule.
+Acceptance: the admin divides the course by **day** or **week** and assigns each lesson to a day/week; the number of days/weeks is **derived** from the plan. The plan defines the pace used to flag learners on-track or behind.
+
+**US-5.6 — Auto-enroll new employees**
+**As an** admin · **I want** a course to optionally enroll new hires automatically · **So that** onboarding starts without manual work.
+Acceptance: a per-course toggle auto-enrolls anyone added to the roster; enrollment is otherwise manual. Manual enrollment implies the course is required for those enrolled (no separate "required" flag).
+
+**US-5.7 — Enroll people after publishing**
+**As an** admin · **I want to** enroll people once the course exists · **So that** I control who takes it and when.
+Acceptance: enrollment happens **after** creation, by individual, function/team, or everyone. Each person's due date is **computed** from their enrollment date plus the plan length — it is not set on the course.
+
+**US-5.8 — Track progress and pacing**
+**As an** admin · **I want to** see who's in progress (and whether they're behind) and who's completed (with the date) · **So that** I can hold people accountable.
+Acceptance: a course view lists enrolled people with lesson progress and a pace flag (on-track / behind by N days against their schedule), and a completed list with each person's finish date (and quiz score where relevant).
+
+**US-5.9 — See my assigned courses (Level Up)**
+**As an** employee · **I want** a Level Up space showing my assigned courses, progress, pace, and due dates · **So that** I know what to do and by when.
+Acceptance: Level Up groups courses as in-progress, not started, and completed; each shows progress, an on-track / behind indicator, and a due date. Reachable from the main nav.
+
+**US-5.10 — Follow my daily plan**
+**As an** employee · **I want to** see a course as a day-by-day (or week-by-week) plan · **So that** I know what to do each day.
+Acceptance: the course shows its schedule with completed, current, and locked lessons; "continue where I left off" jumps to the next lesson. Progress and pace update as lessons complete.
+
+**US-5.11 — Take a lesson**
+**As an** employee · **I want to** watch, read, or take each lesson in place and mark it complete · **So that** I make progress.
+Acceptance: video and presentation lessons play their embed; text lessons render formatted content; quiz lessons let me answer each question type — select answers, type a written response, or record/upload a video. Completing a lesson advances me and updates my progress and pace.
+
+**US-5.12 — Onboarding notifications**
+**As an** employee · **I want** to be pinged when I'm enrolled and when I complete a course · **So that** I don't miss assigned learning.
+Acceptance: "course assigned" notifies the learner; "course completed" notifies admins. Delivered in-app. → US-X.2.
 
 ---
 
@@ -281,9 +335,9 @@ Acceptance: light mode, Satoshi, `#00483B` primary, the defined palette througho
 
 ## Open questions (mirror roadmap §7)
 
-- **OQ-1.** Seed content for the first Lupa Way framework version (Sections + Competencies with definitions/observable-behaviors/outcomes).
+- **OQ-1.** Seed content for the first Company Culture framework version (Sections + Competencies with definitions/observable-behaviors/outcomes).
 - **OQ-2.** Product name (placeholder: "Lupa People").
-- **OQ-3.** Who authors a role-KPI framework when a job title spans multiple managers (default: any manager; recommended: function head).
+- **OQ-3.** Who authors a Per Role framework when a job title spans multiple managers (default: any manager; recommended: function head).
 - **OQ-4.** Half-day AM/PM designation vs. just "half."
 - **OQ-5.** Confirm CEO is the single root and their own PTO routes to an admin.
 - **OQ-6.** Confirm the AI tier action set (default: Keep / Promote / Develop / Flag for PIP review).
